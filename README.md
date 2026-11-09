@@ -44,6 +44,7 @@ A local, full-text searchable archive of the discussions at
 From the repository root:
 
 ```bash
+# assume 201 index pages, 2003 discussions and 6492 post for this example
 npm run crawl:full
 ```
 
