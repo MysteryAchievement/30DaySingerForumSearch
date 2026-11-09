@@ -122,7 +122,7 @@ terminal, while `/api/scan/status` shows the database run row as `running`.
 
 ### 3. Use the Scan page
 
-With the web app running, open <http://localhost:5173/scan>. It shows the
+With the web app running, open <http://localhost:5174/scan>. It shows the
 latest post, totals, the last scan summary, history, and a progress bar while a
 scan started from the page is running.
 
@@ -169,7 +169,7 @@ Terminal 2 — web UI:
 npm run dev:web
 ```
 
-Open <http://localhost:5173>. The Vite dev server proxies `/api` to the Fastify
+Open <http://localhost:5174>. The Vite dev server proxies `/api` to the Fastify
 API on port 3001, so the API must be running for search, discussions, and scan
 requests to work.
 
@@ -188,7 +188,7 @@ changes. It is much faster than a full crawl.
 ### From the web app
 
 1. Start the API and web app as described above.
-2. Open <http://localhost:5173/scan>.
+2. Open <http://localhost:5174/scan>.
 3. Click **Scan for new posts**.
 4. The page polls progress and refreshes the latest post, totals, and history
    when the scan finishes.
@@ -240,7 +240,7 @@ The discussion view shows every stored post in order, with author, exact date
 | `npm run crawl:resume` | Resume the most recent interrupted full crawl, skipping discussions already fetched. |
 | `npm run crawl:scan` | Run the same quick scan the Scan page button runs. |
 | `npm run dev:api` | Start the Fastify API on port 3001. |
-| `npm run dev:web` | Start the Vite dev server on port 5173. |
+| `npm run dev:web` | Start the Vite dev server on port 5174. |
 
 ## Configuration
 
