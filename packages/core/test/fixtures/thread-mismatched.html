@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="85tUhB7haB4J63eMCFdepXt8WHyvyrs5ytcsspAr">
+    <meta name="csrf-token" content="csrf-token-redacted">
 
     <title>30 Day Singer: Online Singing Lessons That Work!</title>
 
@@ -440,7 +440,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <textarea id="body_in_discussion_view" class="richText" name="body" placeholder=""></textarea>
                                     </div>
 
-                <input type="hidden" name="_token" id="csrf_token_field" value="85tUhB7haB4J63eMCFdepXt8WHyvyrs5ytcsspAr">
+                <input type="hidden" name="_token" id="csrf_token_field" value="csrf-token-redacted">
 
                 <div id="new_discussion_footer">
                     <input type='text' id="color" name="color" /><span class="select_color_text">Type Your Discussion Here...</span>
@@ -733,7 +733,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                     update_body = tinyMCE.get('post-edit-' + post_id).getContent();
                 			}
 
-			$.form('/forums/posts/' + post_id, { _token: '85tUhB7haB4J63eMCFdepXt8WHyvyrs5ytcsspAr', _method: 'PATCH', 'body' : update_body }, 'POST').submit();
+			$.form('/forums/posts/' + post_id, { _token: 'csrf-token-redacted', _method: 'PATCH', 'body' : update_body }, 'POST').submit();
 		});
 
 		$('#submit_response').click(function(){
@@ -758,7 +758,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 		$('.delete_response').click(function(){
 			post_id = $(this).parents('li').data('id');
-			$.form('/forums/posts/' + post_id, { _token: '85tUhB7haB4J63eMCFdepXt8WHyvyrs5ytcsspAr', _method: 'DELETE'}, 'POST').submit();
+			$.form('/forums/posts/' + post_id, { _token: 'csrf-token-redacted', _method: 'DELETE'}, 'POST').submit();
 		});
 
 		// logic for when a new discussion needs to be created from the slideUp
@@ -842,6 +842,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- end Pinterest Tag -->
 
                <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js" type="4cc644468c25c8ab3ce7710f-text/javascript"></script>
-           <script src="/livewire/livewire.js?id=90730a3b0e7144480175" data-turbo-eval="false" data-turbolinks-eval="false" type="4cc644468c25c8ab3ce7710f-text/javascript"></script><script data-turbo-eval="false" data-turbolinks-eval="false" type="4cc644468c25c8ab3ce7710f-text/javascript">window.livewire = new Livewire();window.Livewire = window.livewire;window.livewire_app_url = '';window.livewire_token = '85tUhB7haB4J63eMCFdepXt8WHyvyrs5ytcsspAr';window.deferLoadingAlpine = function (callback) {window.addEventListener('livewire:load', function () {callback();});};let started = false;window.addEventListener('alpine:initializing', function () {if (! started) {window.livewire.start();started = true;}});document.addEventListener("DOMContentLoaded", function () {if (! started) {window.livewire.start();started = true;}});</script>
+           <script src="/livewire/livewire.js?id=90730a3b0e7144480175" data-turbo-eval="false" data-turbolinks-eval="false" type="4cc644468c25c8ab3ce7710f-text/javascript"></script><script data-turbo-eval="false" data-turbolinks-eval="false" type="4cc644468c25c8ab3ce7710f-text/javascript">window.livewire = new Livewire();window.Livewire = window.livewire;window.livewire_app_url = '';window.livewire_token = 'csrf-token-redacted';window.deferLoadingAlpine = function (callback) {window.addEventListener('livewire:load', function () {callback();});};let started = false;window.addEventListener('alpine:initializing', function () {if (! started) {window.livewire.start();started = true;}});document.addEventListener("DOMContentLoaded", function () {if (! started) {window.livewire.start();started = true;}});</script>
 <script type="4cc644468c25c8ab3ce7710f-text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","licenseKey":"NRJS-f38d438b4a12bec4c4c","applicationID":"1346175499","transactionName":"blZWZ0pYDRdRBUFfWFccdVBMUAwKHwVdV0NNVkYdXFAQB0UVRl9YVx1HW1dOKgpzB0FTUFZBTQ==","queueTime":0,"applicationTime":499,"atts":"QhFVEQJCHhk=","errorBeacon":"bam.nr-data.net","agent":""}</script><script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="4cc644468c25c8ab3ce7710f-|49" defer></script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5799fa3f9cb9807',t:'MTc5NDE5MzgxOA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5799fa3f9cb9807',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
