@@ -53,6 +53,10 @@ function newestDate(values: Array<string | null>): string | null {
   return newest;
 }
 
+function normalizeBodyHtml(html: string): string {
+  return html.replace(/\sdata-cfemail=(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "");
+}
+
 export async function syncThread(
   pool: Pool,
   client: ForumClient,
@@ -156,21 +160,23 @@ export async function syncThread(
             discussionId,
             post.position,
             post.author,
-            post.bodyHtml,
+            normalizeBodyHtml(post.bodyHtml),
             post.bodyText,
             post.createdAt
           ]
         );
         postsNew += 1;
       } else {
-        if (existingPost.body_html !== post.bodyHtml) postsEdited += 1;
+        const bodyHtml = normalizeBodyHtml(post.bodyHtml);
+        const bodyChanged = normalizeBodyHtml(existingPost.body_html) !== bodyHtml;
+        if (bodyChanged) postsEdited += 1;
         await db.query(
           `UPDATE posts
               SET position = $2,
                   author = $3,
                   body_html = $4,
                   body_text = $5,
-                  edited_at = CASE WHEN body_html IS DISTINCT FROM $4 THEN now() ELSE edited_at END,
+                  edited_at = CASE WHEN $7 THEN now() ELSE edited_at END,
                   created_at = COALESCE($6, created_at),
                   deleted_at = NULL
             WHERE id = $1`,
@@ -178,9 +184,10 @@ export async function syncThread(
             existingPost.id,
             post.position,
             post.author,
-            post.bodyHtml,
+            bodyHtml,
             post.bodyText,
-            post.createdAt
+            post.createdAt,
+            bodyChanged
           ]
         );
       }
