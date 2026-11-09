@@ -1,4 +1,5 @@
 import type { Pool } from "pg";
+import { SCAN_LOCK_KEY } from "../lock";
 import type {
   LatestPost,
   ScanRunRow,
@@ -132,9 +133,18 @@ export async function getScanStatus(pool: Pool): Promise<ScanStatusResponse> {
       )
     : { rows: [] };
 
+  const lockResult = await pool.query<{ held: boolean }>(
+    `SELECT EXISTS (
+       SELECT 1 FROM pg_locks
+        WHERE locktype = 'advisory' AND objid = $1
+     ) AS held`,
+    [SCAN_LOCK_KEY]
+  );
+
   return {
     latestPost,
     lastRun,
+    scanLockHeld: Boolean(lockResult.rows[0]?.held),
     totals: {
       discussions: Number(totalsRow?.discussions ?? 0),
       posts: Number(totalsRow?.posts ?? 0),

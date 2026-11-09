@@ -21,10 +21,16 @@ import { fetchScanProgress, fetchScanStatus, startScan } from "../api";
 import type { ScanProgress, ScanRunRow, ScanStatusResponse } from "../types";
 import { formatDate, formatNumber } from "../util";
 
-function statusColor(status: ScanRunRow["status"]): string {
+function statusColor(status: string): string {
   if (status === "succeeded") return "green";
   if (status === "failed") return "red";
+  if (status === "interrupted") return "yellow";
   return "blue";
+}
+
+function runStatus(run: ScanRunRow, lockHeld: boolean): string {
+  if (run.status === "running" && !lockHeld) return "interrupted";
+  return run.status;
 }
 
 function progressValue(progress: ScanProgress): number {
@@ -114,9 +120,8 @@ export function ScanPage() {
 
   const busy =
     starting ||
-    polling ||
     Boolean(progress?.running) ||
-    status?.lastRun?.status === "running";
+    Boolean(status?.scanLockHeld);
 
   const onScan = async () => {
     setStarting(true);
@@ -143,6 +148,13 @@ export function ScanPage() {
   const lastRun = status?.lastRun ?? null;
   const latestPost = status?.latestPost ?? null;
   const activeKind = progress?.running ? progress.kind : lastRun?.kind;
+  const lockHeld = Boolean(status?.scanLockHeld);
+  const staleRun = Boolean(
+    lastRun && lastRun.status === "running" && !lockHeld && !progress?.running
+  );
+  const activeRun =
+    Boolean(progress?.running) ||
+    Boolean(lastRun?.status === "running" && lockHeld);
 
   return (
     <Stack gap="lg">
@@ -164,7 +176,7 @@ export function ScanPage() {
         </Alert>
       )}
 
-      {(progress?.running || (lastRun?.status === "running" && !progress?.running)) && (
+      {activeRun && (
         <Paper withBorder p="md" radius="md">
           <Group justify="space-between" mb={6}>
             <Text fw={600}>
@@ -193,6 +205,13 @@ export function ScanPage() {
             </Group>
           )}
         </Paper>
+      )}
+
+      {staleRun && (
+        <Alert color="yellow" title="Last scan was interrupted">
+          The previous scan stopped before finishing and is no longer running. You can
+          start a new scan.
+        </Alert>
       )}
 
       {progress?.phase === "failed" && progress.error && (
@@ -248,7 +267,9 @@ export function ScanPage() {
           {lastRun ? (
             <Stack gap={4}>
               <Group gap="xs">
-                <Badge color={statusColor(lastRun.status)}>{lastRun.status}</Badge>
+                <Badge color={statusColor(runStatus(lastRun, lockHeld))}>
+                  {runStatus(lastRun, lockHeld)}
+                </Badge>
                 <Badge variant="light">{lastRun.kind}</Badge>
               </Group>
               <Text size="sm">Started {formatDate(lastRun.startedAt)}</Text>
@@ -338,7 +359,9 @@ export function ScanPage() {
                     <Table.Td>{formatDate(run.startedAt)}</Table.Td>
                     <Table.Td>{run.kind}</Table.Td>
                     <Table.Td>
-                      <Badge color={statusColor(run.status)}>{run.status}</Badge>
+                      <Badge color={statusColor(runStatus(run, lockHeld))}>
+                        {runStatus(run, lockHeld)}
+                      </Badge>
                     </Table.Td>
                     <Table.Td>{formatNumber(run.pagesFetched)}</Table.Td>
                     <Table.Td>{formatNumber(run.discussionsNew)}</Table.Td>

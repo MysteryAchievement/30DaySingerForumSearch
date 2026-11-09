@@ -47,10 +47,19 @@ export function sanitizeForumHtml(html: string): string {
     allowedSchemesAppliedToAttributes: ["href", "src"],
     allowProtocolRelative: false,
     transformTags: {
-      a: sanitizeHtml.simpleTransform("a", {
-        rel: "nofollow noopener noreferrer",
-        target: "_blank"
-      })
+      a: (tagName, attribs) => {
+        if (attribs.href?.startsWith("/cdn-cgi/l/email-protection")) {
+          return { tagName: "span", attribs: {} };
+        }
+        return {
+          tagName,
+          attribs: {
+            ...attribs,
+            rel: "nofollow noopener noreferrer",
+            target: "_blank"
+          }
+        };
+      }
     },
     exclusiveFilter: (frame) =>
       frame.tag === "img" &&

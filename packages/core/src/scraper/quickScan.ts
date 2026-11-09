@@ -6,7 +6,7 @@ import {
   resetScanProgress,
   updateScanProgress
 } from "./progress";
-import type { ScanCounts } from "../types";
+import type { IndexItem, ScanCounts } from "../types";
 
 function hasCountChanges(before: ScanCounts, after: ScanCounts): boolean {
   return (
@@ -49,6 +49,7 @@ export async function runQuickScan(ctx: CrawlContext): Promise<ScanCounts> {
     });
 
     const accumulator: SyncAccumulator = { counts };
+    const failed: IndexItem[] = [];
     let page = 1;
     let scanned = 0;
 
@@ -76,8 +77,13 @@ export async function runQuickScan(ctx: CrawlContext): Promise<ScanCounts> {
 
         if (needsSync) {
           const before = { ...counts };
-          await syncOne(ctx, item, accumulator);
-          if (hasCountChanges(before, counts)) pageChanged = true;
+          const ok = await syncOne(ctx, item, accumulator);
+          if (!ok) {
+            failed.push(item);
+            pageChanged = true;
+          } else if (hasCountChanges(before, counts)) {
+            pageChanged = true;
+          }
         }
 
         scanned += 1;
@@ -112,6 +118,20 @@ export async function runQuickScan(ctx: CrawlContext): Promise<ScanCounts> {
       }
 
       page += 1;
+    }
+
+    if (failed.length > 0) {
+      logger.warn(`Quick scan: retrying ${failed.length} failed threads...`);
+      const stillFailing: IndexItem[] = [];
+      for (const item of failed) {
+        const ok = await syncOne(ctx, item, accumulator);
+        if (!ok) stillFailing.push(item);
+      }
+      if (stillFailing.length > 0) {
+        throw new Error(
+          `Quick scan did not finish cleanly: ${stillFailing.length} threads failed after retry.`
+        );
+      }
     }
 
     logger.info(
