@@ -15,7 +15,7 @@ import {
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { fetchDiscussion } from "../api";
 import type { DiscussionResponse } from "../types";
-import { formatDate, formatNumber } from "../util";
+import { formatDate, formatNumber, highlightHtml } from "../util";
 
 export function DiscussionPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -144,10 +144,10 @@ export function DiscussionPage() {
                 </Badge>
               )}
             </Group>
-            {post.highlightHtml ? (
+            {post.isMatch && q ? (
               <div
                 className="post-body"
-                dangerouslySetInnerHTML={{ __html: post.highlightHtml }}
+                dangerouslySetInnerHTML={{ __html: highlightHtml(post.bodyHtml, q) }}
               />
             ) : (
               <div
