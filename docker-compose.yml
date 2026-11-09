@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: 30daysinger-forum-search-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: forum
+      POSTGRES_PASSWORD: forum
+      POSTGRES_DB: forum_search
+    ports:
+      - "5432:5432"
+    volumes:
+      - forum_search_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U forum -d forum_search"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  forum_search_data:

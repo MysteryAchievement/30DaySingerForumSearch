@@ -1,0 +1,30 @@
+{
+  "name": "30daysinger-forum-search",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "db:migrate": "tsx apps/api/src/cli.ts migrate",
+    "crawl:full": "tsx apps/api/src/cli.ts crawl:full",
+    "crawl:resume": "tsx apps/api/src/cli.ts crawl:full --resume",
+    "crawl:scan": "tsx apps/api/src/cli.ts crawl:scan",
+    "dev:api": "tsx watch apps/api/src/server.ts",
+    "dev:web": "npm run dev --workspace @forum/web",
+    "build:web": "npm run build --workspace @forum/web",
+    "test": "vitest run",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "eslint": "^9.17.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.0",
+    "vitest": "^2.1.8"
+  }
+}
