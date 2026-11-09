@@ -1,4 +1,10 @@
-import { NotFoundError, consoleLogger, type ForumClient, type Logger } from "./client";
+import {
+  CloudflareChallengeError,
+  NotFoundError,
+  consoleLogger,
+  type ForumClient,
+  type Logger
+} from "./client";
 import { parseIndexPage } from "./parseIndexPage";
 import { syncThread, flagDiscussionDeleted } from "./syncThread";
 import { mergeMaxPostId } from "./scanRuns";
@@ -45,6 +51,7 @@ export async function syncOne(
     }
     return true;
   } catch (error) {
+    if (error instanceof CloudflareChallengeError) throw error;
     if (error instanceof NotFoundError) {
       const flagged = await flagDiscussionDeleted(ctx.pool, item.slug);
       if (flagged) accum.counts.discussionsFlaggedDeleted += 1;
