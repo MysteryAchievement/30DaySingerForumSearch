@@ -110,6 +110,7 @@ export interface LatestPost {
 export interface ScanStatusResponse {
   latestPost: LatestPost | null;
   lastRun: ScanRunRow | null;
+  scanLockHeld: boolean;
   totals: {
     discussions: number;
     posts: number;
